@@ -1,60 +1,69 @@
 //jshint esversion:6
 
-const { MongoClient } = require("mongodb");
+const mongoose = require('mongoose');
 
-// Connection URL (Replace the url string with your connection string.)
-// const url = "mongodb+srv://<user>:<password>@<cluster-url>?retryWrites=true&w=majority";
-const url = "mongodb://0.0.0.0:27017";
+mongoose.set('strictQuery', false);
 
-// Create a new MongoClient
-const client = new MongoClient(url);
+main().catch(err => console.log(err));
 
 async function main() {
-  try {
-    // ----- Use connect method to connect to the server -----
-    await client.connect();
-    console.log('Connected successfully to server');
+  await mongoose.connect('mongodb://127.0.0.1/fruitsDB', { useNewUrlParser: true });
+  console.log("Connected");
 
-    // ----- Database Name -----
-    const database = client.db('fruitsDB');
-    // ----- Create a collection -----
-    const fruitsCollection = database.collection('fruits');
+  const fruitSchema = new mongoose.Schema({
+    name: String,
+    rating: Number,
+    review: String
+  });
 
-    // ----- Insert a document (data in row) -----
-    // Create an array of documents to insert
-    const docs = [
-        {
-            name: "Apple",
-            score: 8,
-            review: "Great Fruit"},
-        {
-            name: "Orange",
-            score: 6,
-            review: "Kinda Sour"},
-        {
-            name: "Banana",
-            score: 9,
-            review: "Great Stuff"}
-       ];
+  const Fruit = mongoose.model('Fruit', fruitSchema);
 
-    const insertResult = await fruitsCollection.insertMany(docs);
-    console.log("Inserted " + insertResult.insertedCount + " documents into the fruitsCollection.");
+  const fruit = new Fruit({
+    name: 'Apple',
+    score: 7,
+    review: 'Pretty solid as a fruit.'
+  });
 
-    // ----- 3rd cmd (to check whether the data is in mongosh) -----
-    // (1)mongosh
-    // (2)show dbs
-    // (3)use <databseName>
-    // (4)show collections
-    // (5)db.<collectionName>.find()
+  fruit.save();
 
-    // ----- Find all documents -----
-    const findResult = await fruitsCollection.find({}).toArray();
-    console.table(findResult);
+  const personSchema = new mongoose.Schema ({
+    name: String,
+    age: Number
+  });
 
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
+const Person = mongoose.model('Person', personSchema);
+
+const person = new Person({
+  name: "Ayala",
+  age: 24
+});
+
+person.save();
+
+const kiwi = new Fruit({
+  name: "Kiwi",
+  score: 10,
+  review: "The best fruit!"
+});
+
+const orange = new Fruit({
+  name: "Orange",
+  score: 10,
+  review: "Gives me Energy!"
+});
+
+const banana = new Fruit({
+  name: "Banana",
+  score: 10,
+  review: "Awesome for smoothies!"
+});
+
+Fruit.insertMany([kiwi, orange, banana], function(err){
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("Successfully saved all the fruits to fruitsDB");
   }
+});
+//Remember that all the code has to be within the main function in order for it to work (except for the 'require' thing of course)
 }
-
-main().catch(console.dir);
