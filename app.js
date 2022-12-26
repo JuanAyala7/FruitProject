@@ -26,8 +26,9 @@ async function main() {
   const Fruit = mongoose.model('Fruit', fruitSchema);
 
   const fruit = new Fruit({
+    name: "Strawberry",
     rating: 10,
-    review: 'Peaches are solid as a fruit.'
+    review: 'Strawberries are solid as a fruit.'
   });
 
   //fruit.save();
@@ -52,7 +53,7 @@ const strawberry = new Fruit({
   review: "Great for a pie!"
 });
 
-strawberry.save();
+//strawberry.save();
 
 Person.updateOne({name: "Ayala"}, {favoriteFruit: strawberry}, function(err){
   if (err) {
