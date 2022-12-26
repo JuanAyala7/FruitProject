@@ -2,4 +2,8 @@ db.help
 
 show dbs
 
-use DATABASE_NAME
+use 'database name'
+
+db.dropDatabase()
+
+db.createCollection(name)
