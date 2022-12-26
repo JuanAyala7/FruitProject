@@ -26,24 +26,47 @@ async function main() {
   const Fruit = mongoose.model('Fruit', fruitSchema);
 
   const fruit = new Fruit({
-    name: 'Apple',
     rating: 10,
-    review: 'Pretty solid as a fruit.'
+    review: 'Peaches are solid as a fruit.'
   });
 
-   fruit.save();
+  //fruit.save();
 
   const personSchema = new mongoose.Schema ({
     name: String,
-    age: Number
+    age: Number,
+    favoriteFruit: fruitSchema
   });
 
-const Person = mongoose.model('Person', personSchema);
+const Person = mongoose.model("Person", personSchema);
 
-const person = new Person({
-  name: "Ayala",
-  age: 24
+// const pineapple = new Fruit({
+//   name: "Pineapple",
+//   score: 9,
+//   review: "Very sweet!"
+// });
+
+const strawberry = new Fruit({
+  name: "strawberry",
+  score: 7,
+  review: "Great for a pie!"
 });
+
+strawberry.save();
+
+Person.updateOne({name: "Ayala"}, {favoriteFruit: strawberry}, function(err){
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("Successfully updated document.");
+  }
+});
+
+// const person = new Person({
+//   name: "Essence",
+//   age: 25,
+//   favoriteFruit: pineapple
+// });
 
 // person.save();
 
@@ -85,6 +108,30 @@ Fruit.find(function(err, fruits) {
     });
   }
 });
+
+ // Fruit.updateOne({_id: "63a8ed4c6c88976eccae2b5c"}, {name: "Peach"}, function(err){
+ //   if (err){
+ //     console.log(err);
+ //   } else {
+ //     console.log("Successfully updated the document.");
+ //   }
+ // });
+
+// Fruit.deleteOne({name: "Peach"}, function(err){
+//   if (err){
+//     console.log(err);
+//   } else {
+//     console.log("Item has been deleted from the document.");
+//   }
+// });
+
+// Person.deleteMany({name: "Ayala"}, function(err){
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log("Successfully deleted items from document.");
+//   }
+// });
 
 
 //Remember that all the code has to be within the main function in order for it to work (except for the 'require' thing of course)
