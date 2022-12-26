@@ -7,3 +7,7 @@ use 'database name'
 db.dropDatabase()
 
 db.createCollection(name)
+
+show collections
+
+db.'collection_name'.drop()
