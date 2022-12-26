@@ -24,7 +24,7 @@ async function main() {
     review: 'Pretty solid as a fruit.'
   });
 
-  fruit.save();
+  // fruit.save();
 
   const personSchema = new mongoose.Schema ({
     name: String,
@@ -58,12 +58,27 @@ const banana = new Fruit({
   review: "Awesome for smoothies!"
 });
 
-Fruit.insertMany([kiwi, orange, banana], function(err){
+// Fruit.insertMany([kiwi, orange, banana], function(err){
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log("Successfully saved all the fruits to fruitsDB");
+//   }
+// });
+
+Fruit.find(function(err, fruits) {
   if (err) {
     console.log(err);
   } else {
-    console.log("Successfully saved all the fruits to fruitsDB");
+
+    mongoose.connection.close();
+
+    fruits.forEach(function(fruit){
+      console.log(fruit.name);
+    });
   }
 });
+
+
 //Remember that all the code has to be within the main function in order for it to work (except for the 'require' thing of course)
 }
